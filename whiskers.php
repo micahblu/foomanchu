@@ -5,100 +5,95 @@
  *
  * @author Micah Blu
  * @version 0.0.1
+ * @license MIT Style license
+ * @copyright Micah Blu 
  */
 
 class Whiskers{
 
-	public function __construct(){
+	/**
+	 * PartialsPath
+	 *
+	 * Directory path to lookup partials
+	 *
+	 * @access private
+	 * @since 0.0.2
+	 */
+	private $PartialsPath = '';
 
+	private $Symbols;
+
+	private $Template;
+
+	private $Ext;
+
+	/**
+	 * Constructor
+	 *
+	 * Setup options
+	 *
+	 * @access public
+	 * @param $options [Array]
+	 * @since 0.0.2
+	 */
+	public function __construct($options = array()){
+		$this->PartialsPath = isset($options['partials_path']) ? $options['partials_path'] : null;
+		$this->Ext = isset($options['template_ext']) ? $options['template_ext'] : 'wtp';
 	}
 
 	/**
 	 * whisk
+	 *
 	 * Renders a templates given a string and map array
-	 * @since 0.0.1
+	 *
+	 * @access public
 	 * @param $template [String]
 	 * @param $symbols [Array]
 	 * @param $echo [Bool]
+	 * @since 0.0.1
 	 */
-	public function whisk($template, $symbols, $echo=true){
+	public function whisk($template, $symbols = array(), $echo=true){
 
-
-		if(is_array($symbols)){
-
+		if(!empty($symbols)){
 			foreach($symbols as $field => $symbol){
 				if(is_string($symbol)){
+					//echo $symbol . "<br /><hr />";
 					$template = preg_replace('/\[\[' . $field . '\]\]/', $symbol, $template);
 				}
 			}
 		}
+
+		// If partials path is set, look for partials and render them
+		if(isset($this->PartialsPath)){
+			$this->Symbols = $symbols;
+			$template = preg_replace_callback('/\\[\\[#(.*)\]\]/', array(&$this, 'whiskR'), $template);	
+		}
+
 		$template = preg_replace('/\\[\\[(.*)\\]\\]/', '', $template);
 
 		if($echo) echo $template;
-		else return $template;	
-
+		else return $template;
 	}
 
-	public function parseExpression(){
+	private function whiskR(&$matches){
 
-		if(is_array($symbols)){
+		$file = $this->PartialsPath . DIRECTORY_SEPARATOR . '_' . $matches[1] . "." . $this->Ext;
 
-			foreach($symbols as $field => $symbol){
-				$template = preg_replace('/\[\[' . $field . '\]\]/', $symbol, $template);
-			}
+		if(file_exists($file)){
+
+			$template = file_get_contents($file);
+			return $this->whisk($template, $this->Symbols, false);
+
 		}
-		$template = preg_replace('/\\[\\[[^#\\/].*\\]\\]/', '', $template);
-		//$template = $this->clip($template);
-		//$template = "<h1>Hi, I'm an HTML template</h1> <p>[[#if this =='that']] To be seen or not to be seen, that is the question[[/if]]</p>";
-		// Find and evaluate conditional statements
-		preg_match('/\\[\\[#if(.+)\\]\\][^\\[\\]\\/].+\\[\\[\\/if\\]\\]/s', $template, $ifmatches);
-
-		if(!empty($ifmatches)){
-			// Extract term first so to allow spaces in it
-			preg_match('/[\'\"](.+)[\'\"]/', $ifmatches[1], $match);
-
-			$term = $match[1];
-
-			$ifmatches[1] = str_replace($match[0], "", $ifmatches[1]);
-			
-			list($variable, $operator) = explode(" ", ltrim($ifmatches[1]));
-
-			$term = preg_replace('/\'/', '', $term);
-			$term = preg_replace('/\"/', '', $term);
-
-			if($operator == "=" || $operator == "=="){
-
-				if($symbols[$variable] == $term){
-					$evaluates = true;
-				}else{
-					$evaluates = false;
-				}
-			}elseif($operator == "!=") {
-				if($symbols[$variable] != $term){
-					$evaluates = true;
-				}else{
-					$evaluates = false;
-				}
-			}
-
-			if(!$evaluates){
-				echo $ifmatches[0];
-				$template = str_replace("$ifmatches[0]", "", $template);
-				//
-			}
-			$template = preg_replace('/\[\[(.*)\]\]/', '', $template);
-		}
-		$template = $this->clip($template);
-
-		if($echo) echo $template;
-		else return $template;		
 	}
 
 	/**
 	 * clip
-	 * clip remaining whiskers
-	 * @since 0.0.1
+	 *
+	 * Remove symbol placeholders
+	 *
 	 * @param $template [String]
+	 * @since 0.0.1
 	 */
 	private function clip($template){
 
@@ -110,25 +105,4 @@ class Whiskers{
 		return $template;
 	}
 
-	/**
-	 * clipComments
-	 * clip '\/* *\/ and // style cmments
-	 */
-	private function clipComments($template){
-
-		preg_match_all('/\/\*(.*)\*\//', $template, $matches);
-
-		die(print_r($matches));
-		foreach($matches[0] as $match){
-			$template = str_replace($match, "", $template);
-		}
-		/*
-		preg_match_all('/\/\/.*$/', $template, $matches);
-
-		foreach($matches[0] as $match){
-			$template = str_replace($match, "", $template);
-		}*/
-
-		return $template;
-	}
 }
