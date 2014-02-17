@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Whiskers Light, unopinionated php template engine</title>
+		<link rel="stylesheet" href="assets/css/foundation.min.css" />
+		<link rel="stylesheet" href="assets/css/style.css" />
+	</head>
+
+	<body>
+		<div id="page">
+			<header id="top-header">
+				<h1><strong>Foo</strong>ManChu</h1>
+				<span id="subheader">A very <em>light</em> template engine</span>
+					<span id="foomanchu">[</span>
+		 	</header>
+
+		 	<section class="row">
+		 		<div class="medium-6 columns">
+		 			<h3 align="center">Template:</h3>
+	 				<div class="panel">
+	 					Hello [[[username]]]
+	 				</div>
+		 		</div>
+
+		 		<div class="medium-6 columns">
+		 			<h3 align="center">Becomes:</h3>
+		 			
+		 			<div class="panel">
+		 				Hello [[username]]
+		 			</div>
+		 		</div>
+		 	</section>
+
+		 	<section class="row">
+		 		<div class="medium-6 columns">
+		 			<h3 align="center">Template:</h3>
+	 				<div class="panel">
+	 				[[[#if tired]]]
+	 					<p>Go get yourself a steamy brew!</p>
+	 				[[[/if]]]
+	 				</div>
+		 		</div>
+
+		 		<div class="medium-6 columns">
+		 			<h3 align="center">Becomes:</h3>
+		 			
+		 			<div class="panel">
+		 			[[#if tired]]
+	 					<p>Go get yourself a steamy brew!</p>
+	 				[[/if]]
+		 			</div>
+		 		</div>
+		 	</section>
+
+		</div>
+	</body>
+</html>
+

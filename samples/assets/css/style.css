@@ -1,0 +1,32 @@
+body{
+	font-family: 'Open Sans', Arial, sans-serif;
+}
+
+header{
+  width: 100%;
+  text-align: center;
+}
+
+#top-header h1{
+	font-size: 60px;
+	font-weight: 300;
+}
+
+#top-header .subheader{
+	font-weight: 100;
+	font-variant: italic;
+}
+
+#foomanchu{
+	transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  text-indent: .5em;
+  font-size: 10em;
+  display: block;
+  font-weight: 400;
+  margin-top: -.35em;
+  margin-left: .23em;
+}
