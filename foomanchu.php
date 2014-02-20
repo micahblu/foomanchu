@@ -7,7 +7,7 @@
  * A very light and completely workflow agnostic template engine
  *
  * @author Micah Blu
- * @version 0.0.2
+ * @version 0.0.3
  * @license MIT Style license
  * @copyright Micah Blu 
  */
@@ -55,27 +55,33 @@ class FooManChu{
 	 * @since 0.0.1
 	 */
 	public function render($template, $symbols = array(), $echo=true){
+
 		$began = microtime();
 
 		// Evaluate any statements
-		preg_match_all('/\[\[\#(.*)\]\](.+)\[\[\/.+\]\]/', $template,	$statements);
+		preg_match_all('/(?<!\[)\[\[#(\w+)\s(.*?){2}\]\](.*?)\[{2}\/\1\]\](?!\])/s', $template, $statements);
+		
+		//print_r($statements[0][0]);
 
-		print_r($statements);
+		if(!empty($statements)){
+			$statement = isset($statements[1][0][0]) ? $statements[1][0] : null;
+			$condition = isset($statements[2][0][0]) ? $statements[2][0] : null;
 
-		// Evaluate any statements
-		if($statements){
-
+			// for now only support 'if'
+			if(!$statment && $statement == "if"){
+				if(in_array($condition, $symbols)){
+					$template = str_replace($statements[0][0], $statements[3][0], $template); 
+				}else{
+					$template = str_replace($statements[0][0], '', $template);
+				}
+			}
 		}
 
 		// Replace all template tags with their matching symbol
 		if(!empty($symbols)){
 			foreach($symbols as $field => $symbol){
 				if(is_string($symbol)){
-					//echo $symbol . "<br /><hr />";
-					//$template = preg_replace('/[^\[]\[\[' . $field . '\]\][^\]]/', $symbol, $template);
-					$template = preg_replace('/\[\[' . $field . '\]\]/', $symbol, $template);
-						
-					$template = str_replace('[' . $symbol . ']', '[[' . $symbol . ']]', $template);
+					$template = preg_replace('/(?<!\[)\[\[' . $field . '\]\](?!\])/', $symbol, $template);
 				}
 			}
 		}
@@ -83,18 +89,11 @@ class FooManChu{
 		// If partials path is set, look for partials and render them
 		if(isset($this->PartialsPath)){
 			$this->Symbols = $symbols;
-			$template = preg_replace_callback('/\\[\\[#(.*)\]\]/', array(&$this, 'renderR'), $template);	
+			//$template = preg_replace_callback('/\\[\\[#(.*)\]\]/', array(&$this, 'renderR'), $template);	
 		}
 
-		// Remove unmatched template tags
-		// $template = preg_replace('/\[\[(.+)\]\]/', '', $template);
 		$ended = microtime();
 
-		/*
-		echo "<p>Began @ " . $began . "<br />	 then ended @ " . 
-					$ended . "<br /><strong>Total time: " . 
-					($ended - $began)	 . "</strong><br />";	
-		*/
 		if($echo) echo $template;
 		else return $template;
 	}
