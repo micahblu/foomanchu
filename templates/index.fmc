@@ -8,11 +8,35 @@
 
 	<body>
 		<div id="page">
+		
+			<!-- Fork me :) -->
+			<a href="https://github.com/micahblu/foomanchu"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://github-camo.global.ssl.fastly.net/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+			
 			<header id="top-header">
 				<h1><strong>Foo</strong>ManChu</h1>
 				<span id="subheader">A very <em>light</em> template engine</span>
 					<span id="foomanchu">[</span>
 		 	</header>
+
+		 	<section class="row featured-row">
+
+		 		<h2 class="opening-title">Using FooManChu is super <em>simple</em></h2>
+
+		 		<div class="medium-12 columns">
+	 				<pre>
+					 	<code>
+include "foomanchu.php";
+
+$foomanchu = new FooManChu;
+
+$template = file_get_contents("templates/index.fmc");
+$template_data = array("username" => "micah blu", "tired" => true);
+
+$foomanchu->render($template, $template_data);
+					 	</code>
+					</pre>
+				</div>
+			</section>
 
 		 	<section class="row">	
 		 		<div class="medium-6 columns">
