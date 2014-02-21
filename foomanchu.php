@@ -7,7 +7,7 @@
  * A very light and completely workflow agnostic template engine
  *
  * @author Micah Blu
- * @version 0.0.3
+ * @version 0.0.4
  * @license MIT Style license
  * @copyright Micah Blu 
  */
@@ -60,19 +60,30 @@ class FooManChu{
 
 		// Evaluate any statements
 		preg_match_all('/(?<!\[)\[\[#(\w+)\s(.*?){2}\]\](.*?)\[{2}\/\1\]\](?!\])/s', $template, $statements);
-		
-		//print_r($statements[0][0]);
 
 		if(!empty($statements)){
-			$statement = isset($statements[1][0][0]) ? $statements[1][0] : null;
-			$condition = isset($statements[2][0][0]) ? $statements[2][0] : null;
+			//echo count($statements) . " - Statements found<br />";
 
-			// for now only support 'if'
-			if(!$statment && $statement == "if"){
-				if(in_array($condition, $symbols)){
-					$template = str_replace($statements[0][0], $statements[3][0], $template); 
-				}else{
-					$template = str_replace($statements[0][0], '', $template);
+			for($i=0; $i < count($statements[0]); $i++){
+
+				$statement = isset($statements[1][$i][0]) ? $statements[1][$i] : null;
+				$condition = isset($statements[2][$i][0]) ? $statements[2][$i] : null;
+
+				//echo "Evaluating " . $condition . " against: " . print_r($symbols);
+				// for now only support 'if'
+				if($statement == "if"){
+					$match = false;
+					foreach($symbols as $field => $value){
+						if($condition == $field) $match = true;
+					}
+					if($match){
+						//echo "MATCH: " . $condition . " v " . $field . "<br />";
+						$template = str_replace($statements[0][$i], $statements[3][$i], $template); 
+					}else{
+						//echo $condition . " HAS NO MATCH<br />";
+						//echo "asdfasdf" . $statements[0][$i];
+						$template = str_replace($statements[0][$i], '', $template);
+					}
 				}
 			}
 		}
@@ -89,8 +100,12 @@ class FooManChu{
 		// If partials path is set, look for partials and render them
 		if(isset($this->PartialsPath)){
 			$this->Symbols = $symbols;
-			//$template = preg_replace_callback('/\\[\\[#(.*)\]\]/', array(&$this, 'renderR'), $template);	
+			$template = preg_replace_callback('/\[\[#[^if](.*)\]\]/', array(&$this, 'renderR'), $template);	
 		}
+
+		// Finally replace any remove third brackets for escaped template tags
+		$template = preg_replace('/\[{3}/', '[[', $template);
+		$template = preg_replace('/\]{3}/', ']]', $template);
 
 		$ended = microtime();
 

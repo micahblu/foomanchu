@@ -14,7 +14,7 @@
 					<span id="foomanchu">[</span>
 		 	</header>
 
-		 	<section class="row">
+		 	<section class="row">	
 		 		<div class="medium-6 columns">
 		 			<h3 align="center">Template:</h3>
 	 				<div class="panel">
@@ -47,6 +47,27 @@
 		 			<div class="panel">
 		 			[[#if tired]]
 	 					<p>Go get yourself a steamy brew!</p>
+	 				[[/if]]
+		 			</div>
+		 		</div>
+		 	</section>
+
+		 	<section class="row">
+		 		<div class="medium-6 columns">
+		 			<h3 align="center">Template:</h3>
+	 				<div class="panel">
+	 				[[[#if nottired]]]
+	 					<p>You won't see me!</p>
+	 				[[[/if]]]
+	 				</div>
+		 		</div>
+
+		 		<div class="medium-6 columns">
+		 			<h3 align="center">Becomes:</h3>
+		 			
+		 			<div class="panel">
+		 			[[#if youwantbody]]
+	 					<p>Come on baby let me know</p>
 	 				[[/if]]
 		 			</div>
 		 		</div>
