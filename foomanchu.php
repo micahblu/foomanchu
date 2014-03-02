@@ -62,7 +62,6 @@ class FooManChu{
 		preg_match_all('/(?<!\[)\[\[#(\w+)\s(.*?){2}\]\](.*?)\[{2}\/\1\]\](?!\])/s', $template, $statements);
 
 		if(!empty($statements)){
-			//echo count($statements) . " - Statements found<br />";
 
 			for($i=0; $i < count($statements[0]); $i++){
 
@@ -91,7 +90,8 @@ class FooManChu{
 		// Replace all template tags with their matching symbol
 		if(!empty($symbols)){
 			foreach($symbols as $field => $symbol){
-				if(is_string($symbol)){
+				if(!is_array($symbol) && !is_object($symbol)){
+					//echo "(?<!\[)\[\[' . $field . '\]\](?!\])\n";
 					$template = preg_replace('/(?<!\[)\[\[' . $field . '\]\](?!\])/', $symbol, $template);
 				}
 			}
