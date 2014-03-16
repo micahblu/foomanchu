@@ -1,0 +1,19 @@
+{
+    "name": "foomanchu/foomanchu",
+    "type": "library",
+    "description": "Absurdly simple PHP templating",
+    "keywords": ["templating","foomanchu", "mustache"],
+    "homepage": "http://micahblu.com/lab/foomanchu",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Micah Blu",
+            "email": "micahblu@gmail.com",
+            "homepage": "http://micahblu.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    }
+}

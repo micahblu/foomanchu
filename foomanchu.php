@@ -4,7 +4,7 @@
  *       ____
  *      |    |
  *
- * A very light and completely workflow agnostic template engine
+ * Absurdly simple PHP templating
  *
  * @author Micah Blu
  * @version 0.0.4
@@ -68,7 +68,6 @@ class FooManChu{
 				$statement = isset($statements[1][$i][0]) ? $statements[1][$i] : null;
 				$condition = isset($statements[2][$i][0]) ? $statements[2][$i] : null;
 
-				//echo "Evaluating " . $condition . " against: " . print_r($symbols);
 				// for now only support 'if'
 				if($statement == "if"){
 					$match = false;
@@ -76,11 +75,8 @@ class FooManChu{
 						if($condition == $field) $match = true;
 					}
 					if($match){
-						//echo "MATCH: " . $condition . " v " . $field . "<br />";
 						$template = str_replace($statements[0][$i], $statements[3][$i], $template); 
 					}else{
-						//echo $condition . " HAS NO MATCH<br />";
-						//echo "asdfasdf" . $statements[0][$i];
 						$template = str_replace($statements[0][$i], '', $template);
 					}
 				}
@@ -91,7 +87,6 @@ class FooManChu{
 		if(!empty($symbols)){
 			foreach($symbols as $field => $symbol){
 				if(!is_array($symbol) && !is_object($symbol)){
-					//echo "(?<!\[)\[\[' . $field . '\]\](?!\])\n";
 					$template = preg_replace('/(?<!\[)\[\[' . $field . '\]\](?!\])/', $symbol, $template);
 				}
 			}
