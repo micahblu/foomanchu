@@ -38,6 +38,7 @@ class FooManChu{
 	 * @access public
 	 * @param $options [Array]
 	 * @since 0.0.2
+	 * @retrurn void
 	 */
 	public function __construct($options = array()){
 		$this->PartialsPath = isset($options['partials_path']) ? $options['partials_path'] : dirname(__FILE__);
@@ -53,6 +54,7 @@ class FooManChu{
 	 * @param $symbols [Array]
 	 * @param $echo [Bool]
 	 * @since 0.0.1
+	 * @return String | Parsed HTML
 	 */
 	public function render($template, $symbols = array(), $echo=true){
 
@@ -107,7 +109,15 @@ class FooManChu{
 		if($echo) echo $template;
 		else return $template;
 	}
-
+	
+	/**
+	 * renderR
+	 * 
+	 * Recursive render function
+	 * @param $matches Array 
+	 * @since 0.0.1
+	 * @return String | Parsed HTML
+	 */
 	private function renderR(&$matches){
 
 		$file = $this->PartialsPath . DIRECTORY_SEPARATOR . '_' . $matches[1] . "." . $this->Ext;
